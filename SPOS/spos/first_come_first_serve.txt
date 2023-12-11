@@ -1,0 +1,44 @@
+package lpi;
+
+public class fcfs 
+{
+	public static void main(String [] args)
+	{		
+		int process[] = {1,2,3,4,5,6};
+		int AT[] = {0,0,1,3,4,12};
+		int BT[] = {2,3,1,3,2,4};
+		int CT[] = {-1,-1,-1,-1,-1,-1};
+		int TAT[] = {-1,-1,-1,-1,-1,-1};
+		int WT[] = {-1,-1,-1,-1,-1,-1};
+		int prevcomp=0;
+		
+		for(int i=0;i<process.length;i++)
+		{
+			if(prevcomp>=AT[i])
+			{
+				CT[i]=prevcomp+BT[i];
+				prevcomp = CT[i];
+			} 
+			else if(prevcomp<AT[i])
+			{
+				CT[i]=AT[i]+BT[i];
+				prevcomp=CT[i];
+			}
+		}
+		
+		
+		for(int j=0;j<process.length;j++)
+		{
+			TAT[j]=CT[j]-AT[j];
+			WT[j]=TAT[j]-BT[j];
+		}
+		
+		System.out.println("Process | AT | BT | CT | TAT | WT");
+		System.out.println("----------------------------------");
+		for(int k=0;k<process.length;k++)
+		{
+			System.out.println(process[k]+ "       |" +AT[k]+ "   |" +BT[k]+ "   |" +CT[k]+ "   |" +TAT[k]+ "   |" +WT[k]);
+		}
+		
+	}
+}

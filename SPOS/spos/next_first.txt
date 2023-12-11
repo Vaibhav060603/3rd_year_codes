@@ -1,0 +1,98 @@
+package lpi;
+
+class next
+{
+	
+	public int maxi(int [] available)
+	{
+		int max=available[0];
+		
+		for(int i=0;i<available.length;i++)
+		{
+			if(available[i]>max)
+			{
+				max=available[i];
+			}
+		}
+		return max;
+	}
+	
+	void nextfit(int [] process,int [] available)
+	{
+		int prolength = process.length;
+		int availlength = available.length;
+		int prev=0;
+		
+		int allocation[] = new int[prolength];
+		
+		for(int i=0;i<allocation.length;i++)
+		{
+			allocation[i]=-1;
+		}
+		
+		for(int i=0;i<prolength;i++)
+		{
+			for(int j=0;j<=availlength;j++)
+			{
+				if(process[i]<maxi(available))
+				{
+					if(j>=availlength)
+					{ 
+						prev=0;
+						j=0;
+						
+						if(process[i]<=available[j] && j>prev)
+						{
+							available[j]-=process[i];
+							allocation[i]=j;
+							prev=j;
+							break;
+						}
+					}
+				 
+					else if(process[i]<=available[j] && j>prev)
+					{
+						available[j]-=process[i];
+						allocation[i]=j;
+						prev=j;
+						break;
+					}
+				}
+				
+				else
+				{
+					break;
+				}
+			}
+		}
+		
+		for(int i=0;i<allocation.length;i++)
+		{
+			if(allocation[i]!=-1)
+			{
+				System.out.println(allocation[i]);
+			}
+			
+			else
+			{
+				System.out.println("Required space not available");
+			}
+		}
+		
+	}
+}
+
+
+public class nextfit 
+{
+	public static void main(String [] args)
+	{
+		next n=new next();
+		
+		int [] available = {100,200,400,250,350,130};
+		int [] process = {121,230,200,273,151,160,300};
+		
+		n.nextfit(process,available);
+	}
+}
+

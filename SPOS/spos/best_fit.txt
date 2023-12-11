@@ -1,0 +1,101 @@
+package lpi;
+
+import java.util.Arrays;
+
+class best
+{
+	public int maxi(int [] available)
+	{
+		int max=available[0];
+		
+		for(int i=0;i<available.length;i++)
+		{
+			if(available[i]>max)
+			{
+				max=available[i];
+			}
+		}
+		return max;
+	}
+	
+	public int maxindex(int [] available)
+	{
+		int max=maxi(available);
+		int maxindex=0;
+		
+		for(int i=0;i<available.length;i++)
+		{
+			if(available[i]==max)
+			{
+				maxindex=i;
+			}
+		}
+		return maxindex;
+	}
+	
+	
+	
+	public void bestfit(int process[],int available[])
+	{
+		int prolength = process.length;
+		int availlength = available.length;
+		
+		int allocation[] = new int[prolength];
+		
+		for(int i=0;i<allocation.length;i++)
+		{
+			allocation[i]=-1;
+		}
+		
+		int max;
+		int best;
+		
+		for(int i=0;i<prolength;i++)
+		{
+			max = maxi(available);
+			best = maxindex(available);
+			
+			if(process[i]<max)
+			{
+				for(int j=0;j<availlength;j++)
+				{
+					if(process[i]<=available[j] && available[j]<max && available[best]>available[j])
+					{ 
+						best = j;
+					}	
+				}
+				
+				available[best]-=process[i];
+				allocation[i]=best;	
+			} 
+		}
+		
+		for(int i=0;i<allocation.length;i++)
+		{
+			if(allocation[i]!=-1)
+			{
+				System.out.println(allocation[i]);
+			}
+			
+			else
+			{
+				System.out.println("Required space not available");
+			}
+		}
+	}
+}
+
+
+
+public class bestfit 
+{
+	public static void main(String [] args)
+	{
+		best b=new best();
+		
+		int [] available = {100,200,400,250,350,130};
+		int [] process = {121,230,200,273,151,160,300};
+		
+		b.bestfit(process,available);
+	}
+}

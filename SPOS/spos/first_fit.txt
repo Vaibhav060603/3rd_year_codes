@@ -1,0 +1,58 @@
+package lpi;
+
+class first
+{
+void firstfit(int [] process,int [] available)
+{
+	int prolength = process.length;
+	int availlength = available.length;
+
+	int allocation[] = new int[prolength];
+	
+	for(int i=0;i<allocation.length;i++)
+	{
+		allocation[i]=-1;
+	}
+	
+	for(int i=0;i<prolength;i++)
+	{
+		for(int j=0;j<availlength;j++)
+		{
+			if(process[i]<=available[j])
+			{
+				allocation[i]=j;
+				available[j]-=process[i];
+				break;
+			}
+		}
+	}	
+		
+	for(int i=0;i<allocation.length;i++)
+	{
+		if(allocation[i]!=-1)
+		{
+			System.out.println(allocation[i]);
+		}
+		
+		else
+		{
+			System.out.println("Required space not available");
+		}
+	}
+	
+}
+}
+
+public class firstfit 
+{
+	public static void main(String [] args)
+	{
+	first f=new first();
+	
+	int [] available= {100,200,400,250,350}; 
+	int [] process= {121,230,200,273,151,160};
+	
+	f.firstfit(process,available);
+	
+	}
+}

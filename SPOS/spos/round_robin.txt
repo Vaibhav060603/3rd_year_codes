@@ -1,0 +1,76 @@
+import java.util.Scanner;
+import java.util.Queue;
+import java.util.LinkedList;
+
+public class preemtiveRR {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the total process");
+        int n=sc.nextInt();
+        int[] at = new int[n];
+        int[] bt = new int[n];
+        int[] ct = new int[n];
+        int[] st =  new int[100];
+        int[] btremaining = new int[n];
+        int completionTime=0;
+        boolean[] visited = new boolean[100];
+        int total=0;
+        for(int i=0;i<n;i++){
+            System.out.println("Enter the arrival time");
+            at[i] = sc.nextInt();
+            System.out.println("Enter the burst time");
+            bt[i] = sc.nextInt();
+            btremaining[i]=bt[i];
+        }
+        System.out.println("Enter the time quanta");
+        int tq = sc.nextInt();
+
+        Queue<Integer>q=new LinkedList<>();
+        int index;
+        q.add(0);
+        visited[0]=true;
+
+        while(total<n){
+            //checking for the first process
+            index = q.poll();
+            if(bt[index]==btremaining[index]){
+                st[index] = Math.max(at[index],completionTime);
+                completionTime = st[index];
+            }
+            if(btremaining[index]>tq){
+                btremaining[index]-=tq;
+                completionTime+=tq;
+            }
+            else{
+                completionTime+=btremaining[index];
+                btremaining[index]=0;
+                ct[index]=completionTime;
+                total++;
+            }
+
+            for(int i=0;i<n;i++){
+                if(at[i]<=completionTime && btremaining[i]>=0 && !visited[i]){
+                    q.add(i);
+                    visited[i]=true;
+                }
+            }
+
+            if(btremaining[index]>0){
+                q.add(index);
+            }
+
+            if(q.isEmpty()){
+                for(int i=0;i<n;i++){
+                    if(bt[i]>0){
+                        q.add(i);
+                        visited[i]=true;
+                        break;
+                    }
+                }
+            }
+        }
+        for(int i=0;i<n;i++){
+            System.out.println(ct[i]);
+        }
+    }
+}

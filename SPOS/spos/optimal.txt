@@ -1,0 +1,169 @@
+package lpi;
+
+class coptimal
+{	
+	int ifpresent(int frames[],int element)
+	{
+		int i;
+		for(i=0;i<=frames.length;i++)
+		{
+			if(i>=frames.length)
+			{
+				break;
+			}
+			
+			if(frames[i]==element)
+			{
+				break;
+			}
+		}
+		
+		if(i>=frames.length)
+		{
+			return -1;
+		}
+		else
+		{			
+			return i;
+		}	
+	}
+	
+	
+	
+	
+	public int mfimax(int mfiarray[])
+	{
+		int mfindex = -3;
+		for(int j=0;j<mfiarray.length;j++)
+		{
+			if(mfiarray[j]>mfindex)
+			{
+				mfindex=mfiarray[j];
+			}
+		}
+		
+		return mfindex;
+	}
+	
+	
+	
+	
+	public int mostfar(int string[], int frames[],int i)
+	{
+		int mfiarray[]=new int[frames.length];
+		for(int m=0;m<frames.length;m++)
+		{
+			mfiarray[m]=-3;
+		}
+		
+		for(int fi=0;fi<frames.length;fi++)
+		{
+			for(int j=(string.length-1);j>i;j--)
+			{
+				if(frames[fi]==string[j])
+				{
+					mfiarray[fi]=j;
+					break;
+				}
+			}
+		}
+		
+		return mfimax(mfiarray);
+	}
+	
+	
+	
+	
+	
+	public void optimal(int string[],int frames[])
+	{
+		int strlength = string.length;
+		int frlength = frames.length;
+		int foundindex;
+		int k=0;
+		int pagefault=0;
+		int mfindex;
+		
+		for(int i=0;i<strlength;i++)
+		{
+			if(i<frlength)
+			{
+				foundindex = ifpresent(frames,string[i]);
+				if(foundindex==-1)
+				{
+					frames[k]=string[i];
+					mfindex = mostfar(string, frames, i);
+					if(mfindex==-3)
+					{
+						frames[k]=string[i];
+						k++;
+						pagefault+=1;
+					}
+					else
+					{
+						for(int g=0;g<frames.length;g++)
+						{
+							if(frames[g]==string[mfindex])
+							{
+								frames[g]=string[i];
+								pagefault+=1;
+							}
+						}
+					}
+				}
+				else
+				{
+					frames[foundindex]=string[i];
+				}
+				
+			}
+			else
+			{
+			
+				foundindex = ifpresent(frames,string[i]);
+				if(foundindex==-1)
+				{
+					mfindex = mostfar(string, frames, i);
+					if(mfindex==-3)
+					{
+						frames[0]=string[i];
+						pagefault+=1;
+					}
+					else
+					{
+						for(int g=0;g<frames.length;g++)
+						{
+							if(frames[g]==string[mfindex])
+							{
+								frames[g]=string[i];
+								pagefault+=1;
+							}
+						}
+					}
+				}
+				else
+				{
+					frames[foundindex]=string[i];
+				}
+			}
+		}
+		
+		System.out.println("number of page faults are : "+ pagefault);
+		System.out.println("number of page hits are : "+ (strlength-pagefault));
+	}
+}
+
+
+
+public class optimal 
+{
+	public static void main(String args[])
+	{
+		coptimal o= new coptimal();
+		
+		int string[]= {9,8,8,7,5,3,2,8,2,9,4,5,6,1,1};
+		int frames[]= {-2,-2,-2};
+		
+		o.optimal(string,frames);
+	}
+}

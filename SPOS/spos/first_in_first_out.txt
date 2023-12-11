@@ -1,0 +1,95 @@
+package lpi;
+
+class cfifo
+{
+	int ifpresent(int frames[],int element)
+	{
+		int i;
+		for(i=0;i<=frames.length;i++)
+		{
+			if(i>=frames.length)
+			{
+				break;
+			}
+			
+			if(frames[i]==element)
+			{
+				break;
+			}
+		}
+		
+		if(i>=frames.length)
+		{
+			return -1;
+		}
+		else
+		{			
+			return i;
+		}	
+	}
+	
+	public void fifo(int string[],int frames[])
+	{
+		int strlength = string.length;
+		int frlength=frames.length;
+		int foundindex;
+		int pagefault = 0;
+		int k=0;
+		
+		
+		for(int i=0;i<strlength;i++)
+		{
+				if(i<frlength)
+				{
+					foundindex = ifpresent(frames,string[i]);
+					
+					if(foundindex==-1)
+					{
+						frames[k]=string[i];
+						pagefault+=1;	
+						k++;
+					}
+					else
+					{
+						frames[foundindex]=string[i];
+					}	
+				}
+				
+				else
+				{
+					foundindex = ifpresent(frames,string[i]);
+					
+					if(foundindex==-1)
+					{
+						if(k>=frames.length)
+						{
+							k=0;
+						}
+						frames[k]=string[i];
+						pagefault+=1;
+						k++;
+					}
+					else
+					{
+						frames[foundindex]=string[i];
+					}
+				}
+		}	
+		
+		System.out.println("Number of page faults are : "+pagefault);
+		System.out.println("Number of page hits are : "+(strlength-pagefault));
+	}
+}
+
+
+public class fifo {
+	public static void main(String [] args)
+	{
+		cfifo f = new cfifo();
+
+		int string[]= {9,8,8,7,5,3,2,8,2,9,4,5,6,1};
+		int frames[]= {-2,-2,-2};
+		
+		f.fifo(string,frames);
+	}
+}

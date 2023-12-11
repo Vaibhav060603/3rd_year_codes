@@ -1,0 +1,46 @@
+import java.sql.SQLOutput;
+import java.util.concurrent.Semaphore;
+
+class ATM{
+    public static final int nums = 4;
+    public static Semaphore semaphore = new Semaphore(nums);
+
+    public static void useAtm(int personId){
+        try{
+            semaphore.acquire();
+            System.out.println("The person uses atm id is : " + personId);
+            Thread.sleep(2000);
+            System.out.println("person "+ personId +" completed his work from the ATM");
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();
+        }
+        finally {
+            semaphore.release();
+        }
+    }
+}
+
+
+
+class Person implements Runnable {
+    private int personId ;
+
+    public Person(int personId){
+        this.personId=personId;
+    }
+    @Override
+    public void run(){
+        ATM.useAtm(personId);
+    }
+}
+
+public class ATM_SERVICE {
+    public static void main(String[] args){
+        int num_people =10;
+        for(int i=1;i<=num_people;i++){
+            Thread personThread = new Thread(   new Person(i));
+            personThread.start();
+        }
+    }
+}

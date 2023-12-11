@@ -1,0 +1,141 @@
+package lpi;
+
+class clru
+{
+	
+	int ifpresent(int frames[],int element)
+	{
+		int i;
+		for(i=0;i<=frames.length;i++)
+		{
+			if(i>=frames.length)
+			{
+				break;
+			}
+			
+			if(frames[i]==element)
+			{
+				break;
+			}
+		}
+		
+		if(i>=frames.length)
+		{
+			return -1;
+		}
+		else
+		{			
+			return i;
+		}	
+	}
+	
+	
+	
+	public int arraymin(int lrarray[])
+	{
+		int min=1000;
+		for(int i=0;i<lrarray.length;i++)
+		{
+			if(lrarray[i]<min)
+			{
+				min=lrarray[i];
+			}
+		}
+		
+		return min;
+	}
+	
+	
+	
+	public int lrindex(int frames[],int string[],int i)
+	{
+		int lrarray[]=new int[frames.length];
+		
+		for(int fi=0;fi<frames.length;fi++)
+		{
+			for(int j=i;j>=0;j--)
+			{
+				if(frames[fi]==string[j])
+				{
+					lrarray[fi]=j;
+					break;
+				}
+			}
+		}
+		
+		return arraymin(lrarray);
+	}
+	
+	
+	
+	public void lru(int string[],int frames[])
+	{
+		int strlength = string.length;
+		int frlength = frames.length;
+		int k=0;
+		int foundindex;
+		int pagefault=0;
+		int lrindex;
+		int lrelement;
+		
+		for(int i=0;i<strlength;i++)
+		{
+			if(i<frlength)
+			{
+				foundindex = ifpresent(frames,string[i]);
+				if(foundindex==-1)
+				{
+					frames[k]=string[i];
+					k++;
+					pagefault+=1;
+				}
+				else
+				{
+					frames[foundindex]=string[i];
+				}
+				
+			}
+			else
+			{
+				foundindex = ifpresent(frames,string[i]);
+				if(foundindex==-1)
+				{
+					lrindex = lrindex(frames,string,i);
+					lrelement=string[lrindex];
+					
+					for(int j=0;j<frlength;j++)
+					{
+						if(frames[j]==lrelement)
+						{
+							frames[j]=string[i];
+							break;
+						}
+					}
+					pagefault+=1;
+				}
+				else
+				{
+					frames[foundindex]=string[i];
+				}
+			}
+		}
+		
+		System.out.println("number of page faults are : "+ pagefault);
+		System.out.println("number of page hits are : "+ (strlength-pagefault));
+	}
+}
+
+
+
+public class lru {
+	public static void main(String [] args)
+	{
+		clru l = new clru();
+		
+		int string[]= {9,8,8,7,5,3,2,8,2,9,4,5,6,1};
+		int frames[]= {-2,-2,-2};
+		
+		l.lru(string,frames);
+		
+	}
+}
